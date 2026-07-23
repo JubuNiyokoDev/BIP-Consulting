@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "BIP Consulting"
+version = "1.0.0"
+id = "artifacts/bip-consulting"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22963
+
+[services.development]
+run = "pnpm --filter @workspace/bip-consulting run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/bip-consulting", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/bip-consulting/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22963"
+BASE_PATH = "/"
