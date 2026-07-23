@@ -1,3 +1,4 @@
+import '@/i18n'; // initialize i18n before anything else
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';

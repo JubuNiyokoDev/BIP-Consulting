@@ -25,66 +25,62 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  organization: z.string().min(2, "Organization is required"),
-  interest: z.string().min(1, "Please select an area of interest"),
-  message: z.string().min(10, "Message must be at least 10 characters")
-});
-
-const interests = [
-  "Strategy & Management",
-  "Artificial Intelligence",
-  "Digital Transformation",
-  "Software & Technology",
-  "Talent Solutions",
-  "Entrepreneurship",
-  "International Development",
-  "Other"
-];
+const INTEREST_KEYS = [
+  'interest_strategy',
+  'interest_ai',
+  'interest_digital',
+  'interest_software',
+  'interest_talent',
+  'interest_entrepreneurship',
+  'interest_development',
+  'interest_partnership',
+  'interest_other',
+] as const;
 
 export default function Contact() {
+  const { t } = useTranslation();
   const [submitted, setSubmitted] = useState(false);
+
+  const formSchema = z.object({
+    name: z.string().min(2, t('contact.errorName')),
+    email: z.string().email(t('contact.errorEmail')),
+    organization: z.string().min(1, t('contact.errorOrg')),
+    interest: z.string().min(1, t('contact.errorInterest')),
+    message: z.string().min(20, t('contact.errorMessage')),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      organization: "",
-      interest: "",
-      message: ""
-    },
+    defaultValues: { name: '', email: '', organization: '', interest: '', message: '' },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Stub submission
     console.log(values);
     setSubmitted(true);
   }
 
   return (
     <PageWrapper>
-      <SEO 
-        title="Contact Us" 
-        description="Get in touch with BIP Consulting to discuss your next strategic initiative." 
+      <SEO
+        title={t('contact.seoTitle')}
+        description={t('contact.seoDesc')}
       />
-      
+
       <section className="bg-primary text-white py-24 md:py-32 relative overflow-hidden">
         <div className="container mx-auto px-4 lg:px-8 relative z-10">
-          <motion.div 
+          <motion.div
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
             className="max-w-4xl"
           >
             <motion.h1 variants={fadeUpVariant} className="font-serif text-5xl md:text-7xl font-bold mb-6">
-              Ready to Build the Future?
+              {t('contact.heroTitle')}
             </motion.h1>
             <motion.p variants={fadeUpVariant} className="text-xl md:text-2xl text-white/80 font-light max-w-2xl">
-              Initiate a conversation with our advisory team.
+              {t('contact.heroSubtitle')}
             </motion.p>
           </motion.div>
         </div>
@@ -93,13 +89,11 @@ export default function Contact() {
       <Section className="bg-background">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-16">
+            {/* Left: contact info */}
             <div className="lg:col-span-5">
               <div className="space-y-12 sticky top-32">
                 <div>
-                  <h2 className="font-serif text-3xl font-bold text-primary mb-6">Contact Information</h2>
-                  <p className="text-muted-foreground text-lg mb-8">
-                    We partner with select organizations to execute high-impact engagements. Reach out to discuss how we can accelerate your transformation.
-                  </p>
+                  <h2 className="font-serif text-3xl font-bold text-primary mb-6">{t('contact.officeTitle')}</h2>
                 </div>
 
                 <div className="space-y-6">
@@ -108,7 +102,7 @@ export default function Contact() {
                       <MapPin className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-primary mb-1">Headquarters</h4>
+                      <h4 className="font-bold text-primary mb-1">{t('contact.visitUs')}</h4>
                       <p className="text-muted-foreground">{companyDetails.address}</p>
                     </div>
                   </div>
@@ -118,7 +112,7 @@ export default function Contact() {
                       <Mail className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-primary mb-1">Email</h4>
+                      <h4 className="font-bold text-primary mb-1">{t('contact.emailUs')}</h4>
                       <a href={`mailto:${companyDetails.email}`} className="text-accent hover:underline">
                         {companyDetails.email}
                       </a>
@@ -130,7 +124,7 @@ export default function Contact() {
                       <Phone className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-primary mb-1">Phone</h4>
+                      <h4 className="font-bold text-primary mb-1">{t('contact.callUs')}</h4>
                       <a href={`tel:${companyDetails.phone.replace(/\s+/g, '')}`} className="text-accent hover:underline">
                         {companyDetails.phone}
                       </a>
@@ -140,35 +134,40 @@ export default function Contact() {
               </div>
             </div>
 
+            {/* Right: form */}
             <div className="lg:col-span-7">
-              <div className="bg-white p-8 md:p-12 rounded-3xl border border-border shadow-xl">
+              <div className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-border">
                 {submitted ? (
-                  <div className="text-center py-16">
-                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <svg className="w-10 h-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center py-12"
+                  >
+                    <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
+                      <Mail className="w-10 h-10 text-green-600" />
                     </div>
-                    <h3 className="font-serif text-3xl font-bold text-primary mb-4">Request Received</h3>
-                    <p className="text-lg text-muted-foreground mb-8">
-                      Thank you for reaching out. A member of our advisory team will contact you shortly.
-                    </p>
-                    <Button onClick={() => setSubmitted(false)} variant="outline">Send Another Message</Button>
-                  </div>
+                    <h3 className="font-serif text-3xl font-bold text-primary mb-4">{t('contact.successTitle')}</h3>
+                    <p className="text-muted-foreground mb-8">{t('contact.successDesc')}</p>
+                    <Button variant="outline" onClick={() => { setSubmitted(false); form.reset(); }}>
+                      {t('contact.sendAnother')}
+                    </Button>
+                  </motion.div>
                 ) : (
                   <>
-                    <h3 className="font-serif text-2xl font-bold text-primary mb-8">Send an Inquiry</h3>
+                    <h3 className="font-serif text-2xl font-bold text-primary mb-2">{t('contact.formTitle')}</h3>
+                    <p className="text-muted-foreground mb-8">{t('contact.formSubtitle')}</p>
+
                     <Form {...form}>
                       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div className="grid sm:grid-cols-2 gap-6">
                           <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Full Name</FormLabel>
+                                <FormLabel>{t('contact.fieldName')}</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="John Doe" {...field} className="h-12" />
+                                  <Input placeholder={t('contact.fieldNamePlaceholder')} className="h-12" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -176,12 +175,12 @@ export default function Contact() {
                           />
                           <FormField
                             control={form.control}
-                            name="email"
+                            name="organization"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Email Address</FormLabel>
+                                <FormLabel>{t('contact.fieldOrg')}</FormLabel>
                                 <FormControl>
-                                  <Input type="email" placeholder="john@company.com" {...field} className="h-12" />
+                                  <Input placeholder={t('contact.fieldOrgPlaceholder')} className="h-12" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -189,15 +188,15 @@ export default function Contact() {
                           />
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div className="grid sm:grid-cols-2 gap-6">
                           <FormField
                             control={form.control}
-                            name="organization"
+                            name="email"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Organization</FormLabel>
+                                <FormLabel>{t('contact.fieldEmail')}</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="Company Name" {...field} className="h-12" />
+                                  <Input type="email" placeholder={t('contact.fieldEmailPlaceholder')} className="h-12" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -208,16 +207,18 @@ export default function Contact() {
                             name="interest"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Area of Interest</FormLabel>
+                                <FormLabel>{t('contact.fieldInterest')}</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                   <FormControl>
                                     <SelectTrigger className="h-12">
-                                      <SelectValue placeholder="Select an area" />
+                                      <SelectValue placeholder={t('contact.fieldInterestPlaceholder')} />
                                     </SelectTrigger>
                                   </FormControl>
                                   <SelectContent>
-                                    {interests.map(interest => (
-                                      <SelectItem key={interest} value={interest}>{interest}</SelectItem>
+                                    {INTEREST_KEYS.map((key) => (
+                                      <SelectItem key={key} value={key}>
+                                        {t(`contact.${key}` as any)}
+                                      </SelectItem>
                                     ))}
                                   </SelectContent>
                                 </Select>
@@ -232,12 +233,12 @@ export default function Contact() {
                           name="message"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Message</FormLabel>
+                              <FormLabel>{t('contact.fieldMessage')}</FormLabel>
                               <FormControl>
-                                <Textarea 
-                                  placeholder="Briefly describe your challenge or project..." 
-                                  className="min-h-[150px] resize-none" 
-                                  {...field} 
+                                <Textarea
+                                  placeholder={t('contact.fieldMessagePlaceholder')}
+                                  className="min-h-[150px] resize-none"
+                                  {...field}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -245,8 +246,8 @@ export default function Contact() {
                           )}
                         />
 
-                        <Button type="submit" size="lg" className="w-full h-14 text-lg">
-                          Submit Inquiry
+                        <Button type="submit" size="lg" className="w-full h-14 text-lg" disabled={form.formState.isSubmitting}>
+                          {form.formState.isSubmitting ? t('common.sending') : t('common.submitInquiry')}
                         </Button>
                       </form>
                     </Form>

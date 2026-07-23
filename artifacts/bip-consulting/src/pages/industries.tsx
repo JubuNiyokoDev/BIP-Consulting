@@ -4,28 +4,31 @@ import { motion } from 'framer-motion';
 import { industries } from '@/data/content';
 import { Building2, ArrowRight } from 'lucide-react';
 import { Link } from 'wouter';
+import { useTranslation } from 'react-i18next';
 
 export default function Industries() {
+  const { t } = useTranslation();
+
   return (
     <PageWrapper>
-      <SEO 
-        title="Industries" 
-        description="BIP Consulting serves a diverse range of sectors including Government, Banking, Healthcare, and Technology across Europe and Africa." 
+      <SEO
+        title={t('industries.seoTitle')}
+        description={t('industries.seoDesc')}
       />
-      
+
       <section className="bg-primary text-white py-24 md:py-32 relative overflow-hidden">
         <div className="container mx-auto px-4 lg:px-8 relative z-10">
-          <motion.div 
+          <motion.div
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
             className="max-w-4xl"
           >
             <motion.h1 variants={fadeUpVariant} className="font-serif text-5xl md:text-7xl font-bold mb-6">
-              Industries We Serve
+              {t('industries.heroTitle')}
             </motion.h1>
             <motion.p variants={fadeUpVariant} className="text-xl md:text-2xl text-white/80 font-light max-w-2xl">
-              Deep sectoral knowledge applied to unique structural challenges.
+              {t('industries.heroSubtitle')}
             </motion.p>
           </motion.div>
         </div>
@@ -34,13 +37,15 @@ export default function Industries() {
       <Section className="bg-background">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="mb-16 max-w-3xl">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary mb-6">Cross-Sector Expertise</h2>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary mb-6">
+              {t('industries.crossSector')}
+            </h2>
             <p className="text-lg text-muted-foreground">
-              Transformation requires an understanding of industry-specific regulatory landscapes, legacy architectures, and market dynamics. We bring tailored expertise to {industries.length} key sectors.
+              {t('industries.crossSectorDesc', { count: industries.length })}
             </p>
           </div>
 
-          <motion.div 
+          <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -57,10 +62,12 @@ export default function Industries() {
                   <div className="w-12 h-12 rounded-full bg-secondary text-primary flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-white transition-colors">
                     <Building2 className="w-6 h-6" />
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-primary mb-2">{industry}</h3>
+                  <h3 className="font-serif text-xl font-bold text-primary mb-2">
+                    {t(`industries.${industry}` as any, industry)}
+                  </h3>
                   <div className="mt-auto pt-6 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                     <Link href="/solutions" className="text-accent font-semibold flex items-center gap-2 text-sm uppercase tracking-wider">
-                      View Solutions <ArrowRight className="w-4 h-4" />
+                      {t('industries.viewSolutions')} <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
                 </div>

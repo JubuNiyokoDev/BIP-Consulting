@@ -1,24 +1,27 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { companyDetails } from '@/data/content';
-
-const links = [
-  { href: '/about', label: 'About' },
-  { href: '/services', label: 'Services' },
-  { href: '/industries', label: 'Industries' },
-  { href: '/solutions', label: 'Solutions' },
-  { href: '/insights', label: 'Insights' },
-  { href: '/careers', label: 'Careers' },
-  { href: '/partners', label: 'Partners' }
-];
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 export function Navbar() {
+  const { t } = useTranslation();
   const [location] = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const links = [
+    { href: '/about', label: t('nav.about') },
+    { href: '/services', label: t('nav.services') },
+    { href: '/industries', label: t('nav.industries') },
+    { href: '/solutions', label: t('nav.solutions') },
+    { href: '/insights', label: t('nav.insights') },
+    { href: '/careers', label: t('nav.careers') },
+    { href: '/partners', label: t('nav.partners') },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,21 +79,25 @@ export function Navbar() {
                 ))}
               </ul>
               <div className="h-6 w-[1px] bg-border/50 mx-2" />
+              <LanguageSwitcher variant={transparentMode ? 'light' : 'dark'} />
               <Button asChild variant={transparentMode ? "secondary" : "default"} className={transparentMode ? "bg-white text-primary hover:bg-white/90" : "bg-primary text-primary-foreground"}>
-                <Link href="/contact">Book Consultation</Link>
+                <Link href="/contact">{t('nav.bookConsultation')}</Link>
               </Button>
             </nav>
 
-            {/* Mobile Toggle */}
-            <button
-              className={`xl:hidden relative z-50 p-2 -mr-2 transition-colors ${
-                transparentMode && !mobileMenuOpen ? 'text-white' : 'text-primary'
-              }`}
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Mobile: language + toggle */}
+            <div className="xl:hidden flex items-center gap-1 relative z-50">
+              <LanguageSwitcher variant={transparentMode && !mobileMenuOpen ? 'light' : 'dark'} />
+              <button
+                className={`p-2 -mr-2 transition-colors ${
+                  transparentMode && !mobileMenuOpen ? 'text-white' : 'text-primary'
+                }`}
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label={t('nav.toggleMenu')}
+              >
+                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -103,30 +110,33 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-white pt-24 pb-8 px-6 overflow-y-auto flex flex-col xl:hidden"
+            className="fixed inset-0 z-40 bg-white pt-24 pb-8 px-6 overflow-y-auto xl:hidden flex flex-col"
           >
-            <nav className="flex flex-col gap-6 mb-12">
+            <nav className="flex flex-col gap-2">
               {links.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`text-2xl font-serif font-medium border-b border-border/40 pb-4 ${
+                  className={`text-2xl font-bold py-3 border-b border-border transition-colors hover:text-accent ${
                     location === link.href ? 'text-accent' : 'text-primary'
                   }`}
                 >
                   {link.label}
                 </Link>
               ))}
+              <Link
+                href="/contact"
+                className={`text-2xl font-bold py-3 border-b border-border transition-colors hover:text-accent ${
+                  location === '/contact' ? 'text-accent' : 'text-primary'
+                }`}
+              >
+                {t('nav.contact')}
+              </Link>
             </nav>
-            
-            <div className="mt-auto space-y-6">
-              <Button asChild size="lg" className="w-full text-lg">
-                <Link href="/contact">Book Consultation</Link>
+            <div className="mt-8">
+              <Button asChild size="lg" className="w-full">
+                <Link href="/contact">{t('nav.bookConsultation')}</Link>
               </Button>
-              <div className="text-center text-sm text-muted-foreground">
-                <p>{companyDetails.email}</p>
-                <p>{companyDetails.phone}</p>
-              </div>
             </div>
           </motion.div>
         )}
