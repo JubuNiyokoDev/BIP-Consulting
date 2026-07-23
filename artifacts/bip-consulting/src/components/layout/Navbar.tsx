@@ -3,7 +3,6 @@ import { Link, useLocation } from 'wouter';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { companyDetails } from '@/data/content';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 
@@ -14,27 +13,22 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const links = [
-    { href: '/about', label: t('nav.about') },
-    { href: '/services', label: t('nav.services') },
+    { href: '/about',      label: t('nav.about') },
+    { href: '/services',   label: t('nav.services') },
     { href: '/industries', label: t('nav.industries') },
-    { href: '/solutions', label: t('nav.solutions') },
-    { href: '/insights', label: t('nav.insights') },
-    { href: '/careers', label: t('nav.careers') },
-    { href: '/partners', label: t('nav.partners') },
+    { href: '/solutions',  label: t('nav.solutions') },
+    { href: '/insights',   label: t('nav.insights') },
+    { href: '/careers',    label: t('nav.careers') },
+    { href: '/partners',   label: t('nav.partners') },
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location]);
+  useEffect(() => { setMobileMenuOpen(false); }, [location]);
 
   const isHome = location === '/';
   const transparentMode = isHome && !scrolled;
@@ -43,24 +37,35 @@ export function Navbar() {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          transparentMode
-            ? 'bg-transparent py-6'
-            : 'bg-white shadow-md py-4'
+          transparentMode ? 'bg-transparent py-3' : 'bg-white shadow-md py-2'
         }`}
       >
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between">
+
+            {/* Logo */}
             <Link href="/" className="inline-block relative z-50">
-              <span className={`font-serif text-2xl md:text-3xl font-bold tracking-tight transition-colors ${
-                transparentMode ? 'text-white' : 'text-primary'
-              }`}>
-                BIP
-              </span>
+              {transparentMode ? (
+                /* On dark hero: white pill behind logo so it's always legible */
+                <span className="block bg-white/95 rounded-xl px-2 py-1 shadow">
+                  <img
+                    src="/logo.png"
+                    alt="BIP Consulting"
+                    className="h-10 w-auto object-contain"
+                  />
+                </span>
+              ) : (
+                <img
+                  src="/logo.png"
+                  alt="BIP Consulting"
+                  className="h-12 w-auto object-contain"
+                />
+              )}
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden xl:flex items-center gap-8">
-              <ul className="flex items-center gap-6">
+            <nav className="hidden xl:flex items-center gap-6">
+              <ul className="flex items-center gap-5">
                 {links.map((link) => (
                   <li key={link.href}>
                     <Link
@@ -78,14 +83,18 @@ export function Navbar() {
                   </li>
                 ))}
               </ul>
-              <div className="h-6 w-[1px] bg-border/50 mx-2" />
+              <div className="h-6 w-[1px] bg-border/50 mx-1" />
               <LanguageSwitcher variant={transparentMode ? 'light' : 'dark'} />
-              <Button asChild variant={transparentMode ? "secondary" : "default"} className={transparentMode ? "bg-white text-primary hover:bg-white/90" : "bg-primary text-primary-foreground"}>
+              <Button
+                asChild
+                variant={transparentMode ? 'secondary' : 'default'}
+                className={transparentMode ? 'bg-white text-primary hover:bg-white/90' : 'bg-primary text-primary-foreground'}
+              >
                 <Link href="/contact">{t('nav.bookConsultation')}</Link>
               </Button>
             </nav>
 
-            {/* Mobile: language + toggle */}
+            {/* Mobile: language + hamburger */}
             <div className="xl:hidden flex items-center gap-1 relative z-50">
               <LanguageSwitcher variant={transparentMode && !mobileMenuOpen ? 'light' : 'dark'} />
               <button
@@ -102,7 +111,7 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -110,8 +119,13 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-white pt-24 pb-8 px-6 overflow-y-auto xl:hidden flex flex-col"
+            className="fixed inset-0 z-40 bg-white pt-20 pb-8 px-6 overflow-y-auto xl:hidden flex flex-col"
           >
+            {/* Logo in mobile menu */}
+            <div className="mb-6">
+              <img src="/logo.png" alt="BIP Consulting" className="h-14 w-auto object-contain" />
+            </div>
+
             <nav className="flex flex-col gap-2">
               {links.map((link) => (
                 <Link

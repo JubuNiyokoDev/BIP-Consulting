@@ -10,12 +10,20 @@ export function Footer() {
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 lg:px-8 py-16 lg:py-20">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          {/* Brand */}
+
+          {/* Brand / Logo */}
           <div className="lg:col-span-1">
             <Link href="/">
-              <span className="font-serif text-3xl font-bold text-white tracking-tight">BIP</span>
+              {/* White rounded container so the logo reads on the dark footer */}
+              <span className="inline-block bg-white rounded-xl px-3 py-2 shadow-md">
+                <img
+                  src="/logo.png"
+                  alt="BIP Consulting"
+                  className="h-14 w-auto object-contain"
+                />
+              </span>
             </Link>
-            <p className="mt-4 text-primary-foreground/70 leading-relaxed max-w-xs">
+            <p className="mt-5 text-primary-foreground/70 leading-relaxed max-w-xs text-sm">
               {t('footer.tagline')}
             </p>
           </div>
@@ -24,10 +32,10 @@ export function Footer() {
           <div>
             <h3 className="font-serif text-xl font-semibold mb-6 text-white">{t('footer.companyCol')}</h3>
             <ul className="space-y-4">
-              <li><Link href="/about" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.about')}</Link></li>
-              <li><Link href="/careers" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.careers')}</Link></li>
+              <li><Link href="/about"    className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.about')}</Link></li>
+              <li><Link href="/careers"  className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.careers')}</Link></li>
               <li><Link href="/partners" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.partners')}</Link></li>
-              <li><Link href="/contact" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.contact')}</Link></li>
+              <li><Link href="/contact"  className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.contact')}</Link></li>
             </ul>
           </div>
 
@@ -35,10 +43,10 @@ export function Footer() {
           <div>
             <h3 className="font-serif text-xl font-semibold mb-6 text-white">{t('footer.expertiseCol')}</h3>
             <ul className="space-y-4">
-              <li><Link href="/services" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.services')}</Link></li>
+              <li><Link href="/services"   className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.services')}</Link></li>
               <li><Link href="/industries" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.industries')}</Link></li>
-              <li><Link href="/solutions" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.solutions')}</Link></li>
-              <li><Link href="/insights" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.insights')}</Link></li>
+              <li><Link href="/solutions"  className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.solutions')}</Link></li>
+              <li><Link href="/insights"   className="text-primary-foreground/80 hover:text-accent transition-colors">{t('nav.insights')}</Link></li>
             </ul>
           </div>
 
