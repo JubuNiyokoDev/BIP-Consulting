@@ -319,27 +319,29 @@ export default function Home() {
       </Section>
 
       {/* Trusted By (partners marquee) */}
-      <section className="py-16 border-y border-border bg-white overflow-hidden">
+      <section className="py-16 border-y border-border bg-white overflow-hidden relative">
         <p className="text-center text-sm font-bold uppercase tracking-widest text-muted-foreground mb-8">
           {t('home.trustedBy')}
         </p>
-        <div className="relative flex overflow-hidden">
-          <div className="group flex">
-            <div className="animate-marquee whitespace-nowrap flex items-center gap-16 px-8 group-hover:[animation-play-state:paused]">
-              {[...partners, ...partners].map((partner, i) => (
-                <span key={i} className="font-serif text-2xl text-primary/40 font-bold tracking-tight select-none">
-                  {t(`partners.${partner}` as any, partner)}
-                </span>
-              ))}
-            </div>
-            <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center gap-16 px-8 group-hover:[animation-play-state:paused]">
-              {[...partners, ...partners].map((partner, i) => (
-                <span key={i} className="font-serif text-2xl text-primary/40 font-bold tracking-tight select-none">
-                  {t(`partners.${partner}` as any, partner)}
-                </span>
-              ))}
-            </div>
-          </div>
+        <div className="relative overflow-hidden">
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent" />
+
+          <motion.div
+            className="flex items-center gap-10 whitespace-nowrap px-8 min-w-full"
+            animate={{ x: ['0%', '-50%'] }}
+            transition={{ repeat: Infinity, repeatType: 'loop', ease: 'linear', duration: 28 }}
+            style={{ willChange: 'transform' }}
+          >
+            {[...partners, ...partners].map((partner, i) => (
+              <span
+                key={i}
+                className="inline-flex items-center rounded-full border border-slate-200/80 bg-slate-50 px-6 py-3 text-2xl font-serif font-semibold tracking-tight text-primary/80 shadow-sm shadow-slate-200/50"
+              >
+                {t(`partners.${partner}` as any, partner)}
+              </span>
+            ))}
+          </motion.div>
         </div>
       </section>
 
